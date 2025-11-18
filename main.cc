@@ -1,14 +1,14 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>      // Para EXIT_SUCCESS y EXIT_FAILURE
-#include <sys/stat.h>   // Para stat()
-#include <cstring>      // Para std::strerror
-#include <cerrno>       // Para errno
+#include <cstdlib>      
+#include <sys/stat.h>   
+#include <cstring>      
+#include <cerrno>       
 
-// Incluimos nuestra propia cabecera
 #include "copy_logic.h"
 
 // --- Función Principal ---
+
 int main(int argc, char* argv[]) {
     // 1. Comprobar SOLO el número de argumentos
     if (!check_args_count(argc)) {
@@ -32,21 +32,21 @@ int main(int argc, char* argv[]) {
         destino = destino + "/" + get_filename(origen);
     }
     
-// 4. Comprobar si son el mismo archivo (DESPUÉS de construir la ruta final)
+// 4. Comprobar si son el mismo archivo (depués de construir la ruta final)
     struct stat stat_destino;
     
     if (stat(destino.c_str(), &stat_destino) == 0) {
-        // El archivo de destino SÍ existe. Comprobemos si es el mismo.
+        // El archivo de destino SÍ existe. Comprobamos si es el mismo.
         if (stat_origen.st_dev == stat_destino.st_dev && 
             stat_origen.st_ino == stat_destino.st_ino) {
             std::cerr << "copy: el archivo ORIGEN y DESTINO no pueden ser el mismo\n";
             return EXIT_FAILURE;
         }
     } else {
-        // stat() falló. ¿Por qué?
+        // stat() falló. ¿por qué?
         // Si falló porque el archivo no existe (ENOENT), está bien.
-        // Si falló por cualquier otra razón (ej. Permission denied al leer
-        // los atributos del archivo 'solo_lectura.dat'), ¡es un error!
+        // Si falló por cualquier otra razón (p.e permission denied al leer
+        // los atributos del archivo 'solo_lectura.dat'), es un error
         if (errno != ENOENT) {
             std::cerr << "copy: error al leer el archivo de destino: " << std::strerror(errno) << '\n';
             return EXIT_FAILURE;

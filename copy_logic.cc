@@ -1,16 +1,14 @@
-#include "copy_logic.h" // Incluimos nuestra propia cabecera
-
 #include <vector>
-#include <cerrno>       // Para errno
-#include <iostream>     // Para std::cerr en check_args_count
+#include <cerrno>       
+#include <iostream>     
+#include <unistd.h>     
+#include <fcntl.h>     
+#include <sys/stat.h>  
+#include <cstdint>      
 
-// --- Cabeceras de la API de POSIX ---
-#include <unistd.h>     // Para open, close, read, write
-#include <fcntl.h>      // Para las banderas de open()
-#include <sys/stat.h>   // Para stat() y S_ISDIR()
-#include <cstdint>      // Para uint8_t
+#include "copy_logic.h" 
 
-// 1.4.1. (Modificada) Implementación
+// 1.4.1 Implementación
 bool check_args_count(int argc) {
     if (argc != 3) {
         std::cerr << "copy: se deben indicar los archivos ORIGEN DESTINO\n";
