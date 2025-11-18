@@ -10,8 +10,8 @@
 
 // 1.4.1 Implementación
 bool check_args_count(int argc) {
-    if (argc != 3) {
-        std::cerr << "copy: se deben indicar los archivos ORIGEN DESTINO\n";
+    if (argc < 3) { 
+      std::cerr << "Uso: " << "copy origen1 [origen2 ...] DESTINO\n";
         return false;
     }
     return true;

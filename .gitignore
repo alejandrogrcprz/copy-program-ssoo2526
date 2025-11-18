@@ -1,5 +1,11 @@
-# Ignorar el ejecutable compilado
-copy
-
-# Ignorar los archivos objeto
+# Ignorar archivos objeto y ejecutables
 *.o
+copy
+copy.exe
+
+# Ignorar archivos de prueba
+*.txt
+*.dat
+
+# Ignorar carpetas de prueba creadas
+prueba/
