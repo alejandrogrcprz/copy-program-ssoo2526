@@ -7,6 +7,14 @@
 
 #include "copy_logic.h"
 
+bool check_args_count(int argc) {
+    if (argc < 3) {
+        std::cerr << "copy: se deben indicar los archivos ORIGEN... DESTINO\n";
+        return false;
+    }
+    return true;
+}
+
 int main(int argc, char* argv[]) {
     // 1. Comprobar argumentos
     if (!check_args_count(argc)) {

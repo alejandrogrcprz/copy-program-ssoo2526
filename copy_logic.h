@@ -1,22 +1,37 @@
-#pragma once // Evita que este fichero se incluya múltiples veces
+#pragma once
 
 #include <string>
 #include <expected>
 #include <system_error>
-#include <sys/stat.h>   // Para mode_t
+#include <sys/stat.h>
+#include <unistd.h>
 
-// 1.4.2. Comprobar si DESTINO es un directorio
+// FUNCIONES DE LA UNIDAD 1 
 bool is_directory(const std::string& path);
-
-// 1.4.3. Obtener el nombre del archivo desde una ruta
 std::string get_filename(const std::string& path);
 
-// 1.4.4. Copiar el archivo
 [[nodiscard]]
 std::expected<void, std::system_error> copy_file(
     const std::string& src_path, 
     const std::string& dest_path, 
     mode_t dst_perms);
 
-// 1.4.1. Comprueba solo el número de argumentos
-bool check_args_count(int argc);
+// FUNCIONES DE LA UNIDAD 2
+
+// Obtiene la variable de entorno BACKUP_WORK_DIR
+std::string get_work_dir_path();
+
+// Retorna la ruta completa de la FIFO (dir_trabajo + "/backup.fifo")
+std::string get_fifo_path();
+
+// Retorna la ruta completa del archivo PID (dir_trabajo + "/backup-server.pid")
+std::string get_pid_file_path();
+
+// Convierte ruta relativa a absoluta usando realpath()
+std::expected<std::string, std::system_error> get_absolute_path(const std::string& path);
+
+// Verifica si un archivo existe
+bool file_exists(const std::string& path);
+
+// Verifica si es un archivo regular (wrapper de S_ISREG)
+bool is_regular_file(const std::string& path);

@@ -1,28 +1,44 @@
-# Define el compilador y las banderas
 CXX = g++
-# -std=c++23 es necesario para std::expected
-# -Wall -Wextra son avisos de "buena práctica"
-# -g añade información de depuración
 CXXFLAGS = -std=c++23 -Wall -Wextra -g
 
-# El nombre del programa final
-TARGET = copy
+# Definimos los 3 programas que queremos crear
+TARGETS = copy backup-server backup
 
-# Los ficheros ".o" (objeto) que necesitamos
-OBJECTS = main.o copy_logic.o
+# Objetos comunes (la lógica compartida)
+COMMON_OBJS = copy_logic.o
 
-# La regla principal: para crear el TARGET, depende de los OBJECTS
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+# Regla 'all': compila todo lo de la lista TARGETS
+all: $(TARGETS)
 
-# Regla para crear main.o: depende de main.cc y copy_logic.h
+# --- PROGRAMA 1: COPY (Actividad 1) ---
+# Usa main.cc + copy_logic
+copy: main.o $(COMMON_OBJS)
+	$(CXX) $(CXXFLAGS) -o copy main.o $(COMMON_OBJS)
+
+# --- PROGRAMA 2: SERVIDOR (Actividad 2) ---
+# Usa backup_server.cc + copy_logic
+backup-server: backup_server.o $(COMMON_OBJS)
+	$(CXX) $(CXXFLAGS) -o backup-server backup_server.o $(COMMON_OBJS)
+
+# --- PROGRAMA 3: CLIENTE (Actividad 2) ---
+# Usa backup_client.cc + copy_logic
+backup: backup_client.o $(COMMON_OBJS)
+	$(CXX) $(CXXFLAGS) -o backup backup_client.o $(COMMON_OBJS)
+
+# --- REGLAS DE COMPILACIÓN DE OBJETOS ---
 main.o: main.cc copy_logic.h
-	$(CXX) $(CXXFLAGS) -c main.cc -o main.o
+	$(CXX) $(CXXFLAGS) -c main.cc
 
-# Regla para crear copy_logic.o: depende de copy_logic.cc y copy_logic.h
+backup_server.o: backup_server.cc copy_logic.h
+	$(CXX) $(CXXFLAGS) -c backup_server.cc
+
+backup_client.o: backup_client.cc copy_logic.h
+	$(CXX) $(CXXFLAGS) -c backup_client.cc
+
 copy_logic.o: copy_logic.cc copy_logic.h
-	$(CXX) $(CXXFLAGS) -c copy_logic.cc -o copy_logic.o
+	$(CXX) $(CXXFLAGS) -c copy_logic.cc
 
-# Regla "clean" para borrar los ficheros generados
+# --- LIMPIEZA ---
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	rm -f $(TARGETS) *.o *.exe
+	rm -rf prueba backup *.dat *.txt *.fifo *.pid
